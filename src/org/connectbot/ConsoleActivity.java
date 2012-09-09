@@ -136,6 +136,7 @@ public class ConsoleActivity extends Activity {
 
 			// let manager know about our event handling services
 			bound.disconnectHandler = disconnectHandler;
+			bound.finishHandler = finishHandler;
 
 			Log.d(TAG, String.format("Connected to TerminalManager and found bridges.size=%d", bound.bridges.size()));
 
@@ -190,6 +191,14 @@ public class ConsoleActivity extends Activity {
 		public void handleMessage(Message msg) {
 			// someone below us requested to display a prompt
 			updatePromptVisible();
+		}
+	};
+
+	protected Handler finishHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// someone below us requested to finish this activity
+			finish();
 		}
 	};
 
@@ -551,6 +560,11 @@ public class ConsoleActivity extends Activity {
 				}
 
 				Configuration config = getResources().getConfiguration();
+
+				// Determine whether keyboard permits display-on-touch.
+				String s = prefs.getString("keyboardLayout", "org.connectbot.keyboard.StandardKeyboard");
+				if (!TerminalKeyListener.getKeyboard(s).permitsTouch())
+					return detect.onTouchEvent(event);
 
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					lastX = event.getX();
