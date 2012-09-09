@@ -1015,4 +1015,8 @@ public class TerminalBridge implements VDUDisplay {
 	public void decreaseFontSize() {
 		setFontSize(fontSize - FONT_SIZE_STEP);
 	}
+
+	public void notifyUser(String message) {
+		parent.notifyUser(message);
+	}
 }

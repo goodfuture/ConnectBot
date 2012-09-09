@@ -32,15 +32,15 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
  * @author Kenny Root
@@ -302,7 +302,7 @@ public class ColorsActivity extends Activity implements OnItemClickListener, OnC
 		super.onCreateOptionsMenu(menu);
 
 		MenuItem reset = menu.add(R.string.menu_colors_reset);
-		reset.setAlphabeticShortcut('r');
+		//reset.setAlphabeticShortcut('r');
 		reset.setNumericShortcut('1');
 		reset.setIcon(android.R.drawable.ic_menu_revert);
 		reset.setOnMenuItemClickListener(new OnMenuItemClickListener() {

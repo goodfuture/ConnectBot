@@ -334,4 +334,11 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
 	public void setClipboard(ClipboardManager clipboard) {
 		this.clipboard = clipboard;
 	}
+
+	/**
+	 * @param string
+	 */
+	public void notifyUser(String message) {
+		bridge.notifyUser(message);
+	}
 }
