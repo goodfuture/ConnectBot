@@ -73,7 +73,7 @@ public class TerminalBridge implements VDUDisplay {
 
 	public HostBean host;
 
-	/* package */ AbsTransport transport;
+	/* package */ public AbsTransport transport;
 
 	final Paint defaultPaint;
 

@@ -88,7 +88,7 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	public HostDatabase hostdb;
 	public PubkeyDatabase pubkeydb;
 
-	protected SharedPreferences prefs;
+	private SharedPreferences prefs;
 
 	final private IBinder binder = new TerminalBinder();
 
@@ -120,8 +120,8 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	public void onCreate() {
 		Log.i(TAG, "Starting service");
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		prefs.registerOnSharedPreferenceChangeListener(this);
+		setPrefs(PreferenceManager.getDefaultSharedPreferences(this));
+		getPrefs().registerOnSharedPreferenceChangeListener(this);
 
 		res = getResources();
 
@@ -147,22 +147,22 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 		}
 
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		wantKeyVibration = prefs.getBoolean(PreferenceConstants.BUMPY_ARROWS, true);
+		wantKeyVibration = getPrefs().getBoolean(PreferenceConstants.BUMPY_ARROWS, true);
 
-		wantBellVibration = prefs.getBoolean(PreferenceConstants.BELL_VIBRATE, true);
+		wantBellVibration = getPrefs().getBoolean(PreferenceConstants.BELL_VIBRATE, true);
 		enableMediaPlayer();
 
 		hardKeyboardHidden = (res.getConfiguration().hardKeyboardHidden ==
 			Configuration.HARDKEYBOARDHIDDEN_YES);
 
-		final boolean lockingWifi = prefs.getBoolean(PreferenceConstants.WIFI_LOCK, true);
+		final boolean lockingWifi = getPrefs().getBoolean(PreferenceConstants.WIFI_LOCK, true);
 
 		connectivityManager = new ConnectivityReceiver(this, lockingWifi);
 
 	}
 
 	private void updateSavingKeys() {
-		savingKeys = prefs.getBoolean(PreferenceConstants.MEMKEYS, true);
+		savingKeys = getPrefs().getBoolean(PreferenceConstants.MEMKEYS, true);
 	}
 
 	@Override
@@ -242,7 +242,7 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 			connectivityManager.incRef();
 		}
 
-		if (prefs.getBoolean(PreferenceConstants.CONNECTION_PERSIST, true)) {
+		if (getPrefs().getBoolean(PreferenceConstants.CONNECTION_PERSIST, true)) {
 			ConnectionNotifier.getInstance().showRunningNotification(this);
 		}
 
@@ -253,13 +253,13 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	}
 
 	public String getEmulation() {
-		return prefs.getString(PreferenceConstants.EMULATION, "screen");
+		return getPrefs().getString(PreferenceConstants.EMULATION, "screen");
 	}
 
 	public int getScrollback() {
 		int scrollback = 140;
 		try {
-			scrollback = Integer.parseInt(prefs.getString(PreferenceConstants.SCROLLBACK, "140"));
+			scrollback = Integer.parseInt(getPrefs().getString(PreferenceConstants.SCROLLBACK, "140"));
 		} catch(Exception e) {
 		}
 		return scrollback;
@@ -544,7 +544,7 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	private void enableMediaPlayer() {
 		mediaPlayer = new MediaPlayer();
 
-		float volume = prefs.getFloat(PreferenceConstants.BELL_VOLUME,
+		float volume = getPrefs().getFloat(PreferenceConstants.BELL_VOLUME,
 				PreferenceConstants.DEFAULT_BELL_VOLUME);
 
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
@@ -591,7 +591,7 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	 * @param host
 	 */
 	public void sendActivityNotification(HostBean host) {
-		if (!prefs.getBoolean(PreferenceConstants.BELL_NOTIFICATION, false))
+		if (!getPrefs().getBoolean(PreferenceConstants.BELL_NOTIFICATION, false))
 			return;
 
 		ConnectionNotifier.getInstance().showActivityNotification(this, host);
@@ -623,7 +623,7 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 			wantKeyVibration = sharedPreferences.getBoolean(
 					PreferenceConstants.BUMPY_ARROWS, true);
 		} else if (PreferenceConstants.WIFI_LOCK.equals(key)) {
-			final boolean lockingWifi = prefs.getBoolean(PreferenceConstants.WIFI_LOCK, true);
+			final boolean lockingWifi = getPrefs().getBoolean(PreferenceConstants.WIFI_LOCK, true);
 			connectivityManager.setWantWifiLock(lockingWifi);
 		} else if (PreferenceConstants.MEMKEYS.equals(key)) {
 			updateSavingKeys();
@@ -709,5 +709,19 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 			}
 			mPendingReconnect.clear();
 		}
+	}
+
+	/**
+	 * @return the prefs
+	 */
+	public SharedPreferences getPrefs() {
+		return prefs;
+	}
+
+	/**
+	 * @param prefs the prefs to set
+	 */
+	public void setPrefs(SharedPreferences prefs) {
+		this.prefs = prefs;
 	}
 }

@@ -138,5 +138,13 @@
 		<item>del</item>
 		<item>backspace</item>
 	</string-array>
+	<string-array name="list_keyboard_layout">
+		<item >Standard</item>
+		<item >TF300T - Hardware</item>
+	</string-array>
+	<string-array name="list_keyboard_layout_values">
+		<item >org.connectbot.keyboard.StandardKeyboard</item>
+		<item >org.connectbot.keyboard.TF300TKeyboard</item>
+	</string-array>
 
 </resources>
