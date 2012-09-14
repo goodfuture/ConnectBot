@@ -80,6 +80,7 @@ public class TerminalManager extends Service implements BridgeDisconnectedListen
 	public List<HostBean> disconnected = new LinkedList<HostBean>();
 
 	public Handler disconnectHandler = null;
+	public Handler finishHandler = null;
 
 	public Map<String, KeyHolder> loadedKeypairs = new HashMap<String, KeyHolder>();
 

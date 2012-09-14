@@ -26,6 +26,7 @@ import org.connectbot.util.PreferenceConstants;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
@@ -108,6 +109,14 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
 		updateKeymode();
 	}
 
+	static public IKeyboard getKeyboard(String name)
+	{
+		if ("org.connectbot.keyboard.TF300TKeyboard".equals(name))
+			return new TF300TKeyboard();
+		else // s == "org.connectbot.keyboard.StandardKeyboard"
+			return new StandardKeyboard();
+	}
+
 	/**
 	 * Handle onKey() events coming down from a {@link TerminalView} above us.
 	 * Modify the keys to make more sense to a host then pass it to the transport.
@@ -117,10 +126,7 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
 		if (lastKeyboard == null || !s.equals(lastKeyboard.getClass().getName()))
 		{
 			Log.i(TAG, "Switching keyboard preference to " + s + ".");
-			if ("org.connectbot.keyboard.TF300TKeyboard".equals(s))
-				lastKeyboard = new TF300TKeyboard();
-			else // s == "org.connectbot.keyboard.StandardKeyboard"
-				lastKeyboard = new StandardKeyboard();
+			lastKeyboard = TerminalKeyListener.getKeyboard(s);
 		}
 
 		return lastKeyboard.onKey(this, v, keyCode, event);
@@ -340,5 +346,13 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
 	 */
 	public void notifyUser(String message) {
 		bridge.notifyUser(message);
+	}
+
+	/**
+	 *
+	 */
+	public void finish() {
+		if (manager.finishHandler != null)
+			Message.obtain(manager.finishHandler, -1, bridge).sendToTarget();
 	}
 }

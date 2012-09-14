@@ -368,4 +368,11 @@ public class StandardKeyboard implements IKeyboard {
 
 		return false;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.connectbot.keyboard.IKeyboard#permitsTouch()
+	 */
+	public boolean permitsTouch() {
+		return true;
+	}
 }

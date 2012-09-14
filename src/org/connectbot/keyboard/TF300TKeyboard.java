@@ -99,6 +99,17 @@ public class TF300TKeyboard implements IKeyboard {
 				// Handle special characters.
 				switch(keyCode) {
 					case KeyEvent.KEYCODE_BACK:
+						// Check to see whether this is the back button on the
+						// screen (-1) or whether it's the back button on the
+						// keyboard.  We only want to treat the keyboard back
+						// as ESC.
+						if (event.getDeviceId() == -1)
+						{
+							// Simulate the back key press.
+							this.saveState(listener);
+							listener.finish();
+							return true;
+						}
 						listener.sendEscape();
 						break;
 					case KeyEvent.KEYCODE_TAB:
@@ -110,7 +121,7 @@ public class TF300TKeyboard implements IKeyboard {
 									listener.getStateForBuffer());
 						else
 						{
-							// Pretend we didn't handle it so that it still does volume up...
+							// Pretend we didn't handle it so that it still does volume up.
 							this.saveState(listener);
 							return false;
 						}
@@ -127,12 +138,14 @@ public class TF300TKeyboard implements IKeyboard {
 						else if ((listener.metaState & TerminalKeyListener.META_SHIFT_ON) != 0 && !m_DeleteWithVolumeUp)
 							((vt320) listener.getBuffer()).keyPressed(vt320.KEY_DELETE, ' ',
 									listener.getStateForBuffer());
+						else if ((listener.metaState & TerminalKeyListener.META_SHIFT_ON) != 0 && m_DeleteWithVolumeUp)
+							((vt320) listener.getBuffer()).keyPressed(vt320.KEY_BACK_SPACE, ' ',
+									0 /* prevent treatment as delete */);
 						else
 							((vt320) listener.getBuffer()).keyPressed(vt320.KEY_BACK_SPACE, ' ',
 									listener.getStateForBuffer());
 						break;
 					case KeyEvent.KEYCODE_ENTER:
-						Log.d(TerminalKeyListener.TAG, "handling ENTER as special!");
 						((vt320)listener.getBuffer()).keyTyped(vt320.KEY_ENTER, ' ',
 								listener.getStateForBuffer());
 						break;
@@ -185,6 +198,13 @@ public class TF300TKeyboard implements IKeyboard {
 		}
 
 		this.saveState(listener);
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.connectbot.keyboard.IKeyboard#permitsTouch()
+	 */
+	public boolean permitsTouch() {
 		return false;
 	}
 

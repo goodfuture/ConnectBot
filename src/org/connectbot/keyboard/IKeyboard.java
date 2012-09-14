@@ -22,4 +22,11 @@ public interface IKeyboard {
 	 * @return Whether the key press was handled.
 	 */
 	public boolean onKey(TerminalKeyListener listener, View v, int keyCode, KeyEvent event);
+
+	/**
+	 * Returns whether or not this keyboard permits the on-screen
+	 * touch display to appear.
+	 * @return Whether the on-screen touch display should appear.
+	 */
+	public boolean permitsTouch();
 }
