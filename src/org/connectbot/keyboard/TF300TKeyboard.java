@@ -165,6 +165,22 @@ public class TF300TKeyboard implements IKeyboard {
 						((vt320) listener.getBuffer()).keyPressed(vt320.KEY_RIGHT, ' ',
 								listener.getStateForBuffer());
 						break;
+					case KeyEvent.KEYCODE_MOVE_HOME:
+						((vt320) listener.getBuffer()).keyPressed(vt320.KEY_HOME, ' ',
+								listener.getStateForBuffer());
+						break;
+					case KeyEvent.KEYCODE_PAGE_UP:
+						((vt320) listener.getBuffer()).keyPressed(vt320.KEY_PAGE_UP, ' ',
+								listener.getStateForBuffer());
+						break;
+					case KeyEvent.KEYCODE_PAGE_DOWN:
+						((vt320) listener.getBuffer()).keyPressed(vt320.KEY_PAGE_DOWN, ' ',
+								listener.getStateForBuffer());
+						break;
+					case KeyEvent.KEYCODE_MOVE_END:
+						((vt320) listener.getBuffer()).keyPressed(vt320.KEY_END, ' ',
+								listener.getStateForBuffer());
+						break;
 					case KeyEvent.KEYCODE_SHIFT_LEFT:
 					case KeyEvent.KEYCODE_SHIFT_RIGHT:
 					case KeyEvent.KEYCODE_ALT_LEFT:
